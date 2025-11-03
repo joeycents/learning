@@ -18,12 +18,17 @@ class ContentCurator:
 
     def curate_learning_bundle(
         self,
-        git_analysis: Dict,
+        user_prompt: str,
         learning_focus: str = "game development",
         config: Dict = None
     ) -> Dict:
         """
-        Curate a learning bundle based on git analysis.
+        Curate a learning bundle based on user's description of what they worked on.
+
+        Args:
+            user_prompt: Description of what the user worked on/wants to learn
+            learning_focus: Primary learning focus (e.g., "game development")
+            config: Configuration dictionary
 
         Returns a dictionary with:
         - youtube_video: YouTube video recommendation
@@ -33,60 +38,70 @@ class ContentCurator:
         config = config or {}
 
         # Build the prompt for Claude
-        prompt = self._build_curation_prompt(git_analysis, learning_focus, config)
+        prompt = self._build_curation_prompt(user_prompt, learning_focus, config)
 
         try:
-            # Call Claude API
+            # Call Claude API with extended thinking for better research
             message = self.client.messages.create(
                 model="claude-sonnet-4-20250514",
-                max_tokens=4096,
+                max_tokens=16000,
+                thinking={
+                    "type": "enabled",
+                    "budget_tokens": 10000
+                },
                 messages=[{
                     "role": "user",
                     "content": prompt
                 }]
             )
 
-            # Parse the response
-            response_text = message.content[0].text
+            # Parse the response (skip thinking blocks, get the text)
+            response_text = ""
+            for block in message.content:
+                if block.type == "text":
+                    response_text = block.text
+                    break
+
             bundle = self._parse_response(response_text)
 
             return bundle
 
         except Exception as e:
+            print(f"Error in content curation: {e}")
             return self._get_fallback_bundle(str(e))
 
     def _build_curation_prompt(
         self,
-        git_analysis: Dict,
+        user_prompt: str,
         learning_focus: str,
         config: Dict
     ) -> str:
         """Build the prompt for Claude to curate content."""
 
-        prompt = f"""You are a learning curator specializing in {learning_focus}. Your task is to create a personalized daily learning bundle based on recent coding work.
+        prompt = f"""You are a learning curator specializing in {learning_focus}. Your task is to create a personalized daily learning bundle.
 
-## Recent Work Analysis
+## What the user worked on / wants to learn:
 
-{self._format_git_analysis(git_analysis)}
+{user_prompt}
 
 ## Task
 
 Create a learning bundle with the following components:
 
-1. **YouTube Video**: Find a relevant YouTube video (10-30 minutes) that teaches a concept related to the code changes above. The video should deepen understanding of what was worked on.
+1. **YouTube Video**: Search the web to find a REAL, high-quality YouTube video (10-30 minutes) that teaches concepts related to what the user described. You MUST provide an actual, real video URL.
 
-2. **Article**: Recommend a high-quality article or tutorial that provides detailed knowledge about the topics in the code.
+2. **Article**: Search the web to find a REAL, high-quality article or tutorial. You MUST provide an actual, real article URL from a reputable source (official docs, well-known blogs, tutorials).
 
-3. **Coding Exercise**: Create an original coding exercise that reinforces the concepts from the recent work. The exercise should be practical and directly applicable to game development.
+3. **Coding Exercise**: Create an original, practical coding exercise that reinforces the concepts. Make it challenging but achievable in 30-60 minutes.
 
-## Requirements
+## CRITICAL REQUIREMENTS
 
+- **Use web search to find REAL resources** - Do NOT make up URLs or links
+- **Verify the content exists** - Only recommend resources you can confirm are real
 - Focus on {learning_focus}
-- Make recommendations highly relevant to the actual code changes
-- YouTube video should be from a reputable channel
-- Article should be from a quality source (official docs, well-known blogs, tutorials)
-- Exercise should be challenging but achievable in 30-60 minutes
-- Exercise should include: description, starter code (if needed), and hints
+- YouTube videos should be from reputable channels (Sebastian Lague, Brackeys, Code Monkey, GDC, etc.)
+- Articles should be from quality sources (Unity docs, Unreal docs, gamedeveloper.com, etc.)
+- Exercise should be original and practical
 
 ## Output Format
 
@@ -94,62 +109,35 @@ Respond ONLY with valid JSON in this exact format:
 
 {{
   "youtube_video": {{
-    "title": "Video Title",
-    "url": "https://youtube.com/watch?v=...",
-    "channel": "Channel Name",
-    "duration": "15:30",
-    "why_relevant": "Explanation of why this video is relevant to the recent work"
+    "title": "Exact video title",
+    "url": "https://youtube.com/watch?v=REAL_VIDEO_ID",
+    "channel": "Exact channel name",
+    "duration": "MM:SS",
+    "why_relevant": "Why this specific video helps with what they're learning"
   }},
   "article": {{
-    "title": "Article Title",
-    "url": "https://...",
-    "source": "Website/Blog Name",
-    "estimated_read_time": "10 minutes",
-    "why_relevant": "Explanation of relevance"
+    "title": "Exact article title",
+    "url": "https://actual-real-url.com/article",
+    "source": "Website name",
+    "estimated_read_time": "X minutes",
+    "why_relevant": "Why this specific article is helpful"
   }},
   "exercise": {{
     "title": "Exercise Title",
-    "description": "Detailed description of what to build/implement",
-    "difficulty": "intermediate",
-    "estimated_time": "45 minutes",
-    "learning_objectives": ["objective 1", "objective 2"],
-    "starter_code": "// Optional starter code here",
+    "description": "Clear, detailed description of what to build/implement",
+    "difficulty": "beginner|intermediate|advanced",
+    "estimated_time": "X minutes",
+    "learning_objectives": ["objective 1", "objective 2", "objective 3"],
+    "starter_code": "// Helpful starter code if applicable",
     "hints": ["hint 1", "hint 2", "hint 3"],
     "bonus_challenges": ["bonus 1", "bonus 2"]
   }},
-  "daily_insight": "A brief motivational insight connecting yesterday's work to today's learning (2-3 sentences)"
+  "daily_insight": "A brief, motivating insight connecting their work to today's learning (2-3 sentences)"
 }}
 
-Remember: Output ONLY the JSON, no other text."""
+IMPORTANT: Use your web search capability to find real, verified URLs. Output ONLY the JSON, no other text."""
 
         return prompt
-
-    def _format_git_analysis(self, git_analysis: Dict) -> str:
-        """Format git analysis for the prompt."""
-        if not git_analysis.get("has_changes"):
-            return "No recent code changes detected. Please provide general game development learning content."
-
-        formatted = []
-        formatted.append(f"**Summary**: {git_analysis.get('summary', 'N/A')}")
-        formatted.append(f"**Commits**: {git_analysis.get('commit_count', 0)}")
-
-        if git_analysis.get("commit_messages"):
-            formatted.append("\n**Recent Commit Messages**:")
-            for msg in git_analysis["commit_messages"][:3]:  # Top 3 commits
-                formatted.append(f"- {msg['message']}")
-
-        if git_analysis.get("files_changed"):
-            formatted.append(f"\n**Files Modified**: {', '.join(git_analysis['files_changed'][:10])}")
-
-        if git_analysis.get("code_snippets"):
-            formatted.append("\n**Sample Code Changes**:")
-            for snippet in git_analysis["code_snippets"][:2]:  # Top 2 snippets
-                formatted.append(f"\nFile: {snippet['file']}")
-                formatted.append("```")
-                formatted.append('\n'.join(snippet['changes'][:10]))
-                formatted.append("```")
-
-        return '\n'.join(formatted)
 
     def _parse_response(self, response_text: str) -> Dict:
         """Parse Claude's JSON response."""

@@ -1,108 +1,100 @@
-# 🎮 Daily Game Dev Learning Bundle
+# Daily Game Dev Learning Bundle
 
-An intelligent system that analyzes your daily game development work and sends you a personalized learning bundle every day. Each bundle includes a curated YouTube video, article, and coding exercise tailored to what you've been working on.
+A minimalist AI-powered system that creates personalized learning bundles for game developers. Tell it what you're working on, and receive a curated email with a YouTube video, article, and coding exercise—all tailored to deepen your understanding.
 
-## ✨ Features
+## Features
 
-- **Smart Code Analysis**: Analyzes your git commits to understand what you've been working on
-- **AI-Powered Curation**: Uses Claude AI to find relevant YouTube videos, articles, and generate custom coding exercises
-- **Beautiful Emails**: Sends professionally designed HTML emails with all your learning resources
-- **Highly Configurable**: Customize learning topics, difficulty levels, and preferences
-- **Automated Scheduling**: Set it up once and get daily learning bundles automatically
+- **Simple Prompt-Based**: Just describe what you worked on or want to learn
+- **AI-Curated Content**: Claude AI searches for real, high-quality resources
+- **Beautiful Minimalist Emails**: Clean black & white design, professionally formatted
+- **Custom Exercises**: Original coding exercises with hints and challenges
+- **Flexible Input**: Interactive mode, command-line arguments, or file-based prompts
 
-## 📋 What You'll Get Daily
+## What You Get
 
-Each morning, you'll receive an email containing:
+Each bundle contains:
 
-1. **🎥 YouTube Video**: A 10-30 minute tutorial related to your recent work
-2. **📚 Article**: An in-depth article or tutorial to deepen your understanding
-3. **💻 Coding Exercise**: A custom exercise with starter code, hints, and bonus challenges
-4. **💡 Daily Insight**: A personalized reflection connecting your work to your learning
+1. **YouTube Video**: A 10-30 minute tutorial from reputable channels
+2. **Article**: An in-depth article or tutorial from quality sources
+3. **Coding Exercise**: A custom practice exercise with learning objectives and hints
+4. **Daily Insight**: A personalized reflection on why these resources matter
 
-## 🚀 Quick Start
+## Quick Start
 
-### Prerequisites
+### 1. Install Dependencies
 
-- Python 3.8 or higher
-- Git repository (for code analysis)
-- Anthropic API key (for Claude AI)
-- Email account with SMTP access (Gmail recommended)
-
-### Installation
-
-1. **Clone or navigate to your project directory**:
-   ```bash
-   cd /path/to/your/game/project
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Set up environment variables**:
-   ```bash
-   cp .env.example .env
-   ```
-
-   Edit `.env` and add your credentials:
-   ```env
-   ANTHROPIC_API_KEY=your_anthropic_api_key_here
-   SMTP_SERVER=smtp.gmail.com
-   SMTP_PORT=587
-   EMAIL_FROM=your-email@gmail.com
-   EMAIL_PASSWORD=your_app_specific_password
-   EMAIL_TO=your-email@gmail.com
-   ```
-
-   **For Gmail users**: You'll need to create an App Password:
-   - Go to your Google Account settings
-   - Security → 2-Step Verification → App passwords
-   - Generate a new app password for "Mail"
-   - Use that password in your `.env` file
-
-4. **Configure your preferences** (optional):
-   Edit `config.yaml` to customize your learning topics, difficulty level, and other settings.
-
-### Usage
-
-#### Test your setup:
 ```bash
-# Test email connection
-python daily_bundle.py --test-email
-
-# Generate bundle without sending (dry run)
-python daily_bundle.py --dry-run
+pip3 install -r requirements.txt
 ```
 
-#### Send your first learning bundle:
+### 2. Set Up Credentials
+
 ```bash
-python daily_bundle.py
+python3 setup.py
 ```
 
-This will:
-1. Analyze your git commits from yesterday
-2. Use AI to curate relevant learning content
-3. Send a beautiful email to your inbox
+You'll need:
+- **Anthropic API Key** from https://console.anthropic.com/
+- **Email credentials** (Gmail with App Password recommended)
 
-## ⚙️ Configuration
+### 3. Generate Your First Bundle
 
-Edit `config.yaml` to customize your experience:
+**Interactive mode** (will prompt you for input):
+```bash
+python3 daily_bundle.py
+```
+
+**With a prompt**:
+```bash
+python3 daily_bundle.py --prompt "Worked on Unity character controller physics today"
+```
+
+**Preview without sending**:
+```bash
+python3 daily_bundle.py --dry-run --prompt "Learning shader programming in Unity"
+```
+
+## Usage Examples
+
+### Interactive Mode
+```bash
+python3 daily_bundle.py
+# You'll be prompted to describe what you worked on
+```
+
+### Command Line Prompt
+```bash
+python3 daily_bundle.py -p "Implemented A* pathfinding for enemy AI"
+```
+
+### From a File
+Create a file with your daily notes:
+```bash
+echo "Today I worked on:
+- Implementing player movement with physics
+- Adding jump mechanics
+- Debugging collision detection issues" > today.txt
+
+python3 daily_bundle.py --prompt-file today.txt
+```
+
+### Weekly Summary
+```bash
+echo "This week I learned about:
+- Unity's new input system
+- Scriptable objects for game design
+- Shader graph basics" > week.txt
+
+python3 daily_bundle.py --prompt-file week.txt
+```
+
+## Configuration
+
+Edit `config.yaml` to customize:
 
 ```yaml
 # Your primary learning focus
 learning_focus: "game development"
-
-# Topics of interest
-topics:
-  - "Unity game engine"
-  - "game physics"
-  - "game AI"
-  - "3D graphics"
-  - "shader programming"
-
-# How many days back to analyze
-days_to_analyze: 1
 
 # Content preferences
 content:
@@ -112,132 +104,103 @@ content:
     preferred_length: "medium"
   exercise:
     difficulty: "intermediate"
-    include_solution_hints: true
 ```
 
-## 🤖 Automation
+## Automation
 
-### Set up daily automation with cron:
+### Save Prompts Daily
 
-1. Open your crontab:
-   ```bash
-   crontab -e
-   ```
+Create a simple habit of saving daily notes:
 
-2. Add a daily job (example: run at 9 AM every day):
-   ```bash
-   0 9 * * * cd /home/user/learning && /usr/bin/python3 daily_bundle.py
-   ```
-
-3. Or use the full path to your Python virtual environment:
-   ```bash
-   0 9 * * * cd /home/user/learning && /home/user/learning/venv/bin/python daily_bundle.py
-   ```
-
-### Alternative: GitHub Actions
-
-Create `.github/workflows/daily-bundle.yml`:
-
-```yaml
-name: Daily Learning Bundle
-
-on:
-  schedule:
-    - cron: '0 9 * * *'  # 9 AM UTC daily
-  workflow_dispatch:
-
-jobs:
-  send-bundle:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - run: pip install -r requirements.txt
-      - name: Send Daily Bundle
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          EMAIL_TO: ${{ secrets.EMAIL_TO }}
-        run: python daily_bundle.py
+```bash
+# Add to your daily workflow
+echo "Today I worked on: [your notes]" >> daily_$(date +%Y%m%d).txt
+python3 daily_bundle.py --prompt-file daily_$(date +%Y%m%d).txt
 ```
 
-## 📂 Project Structure
+### Cron Job (Optional)
+
+If you maintain a `today.txt` file:
+
+```bash
+crontab -e
+# Add:
+0 9 * * * cd /home/user/learning && python3 daily_bundle.py --prompt-file today.txt
+```
+
+## Email Template
+
+The email template is minimalist, black & white, and professionally designed:
+- Clean typography with SF Pro Display
+- Clear hierarchy with numbered sections
+- "Why relevant" summaries for each resource
+- Mobile-responsive layout
+
+To customize, edit `templates/email_template.html`.
+
+## Command Reference
+
+```bash
+# Interactive mode
+python3 daily_bundle.py
+
+# With prompt
+python3 daily_bundle.py --prompt "Your learning topic"
+python3 daily_bundle.py -p "Your learning topic"
+
+# From file
+python3 daily_bundle.py --prompt-file myfile.txt
+
+# Preview without sending
+python3 daily_bundle.py --dry-run --prompt "Topic"
+
+# Test email connection
+python3 daily_bundle.py --test-email
+
+# Custom config file
+python3 daily_bundle.py --config custom_config.yaml
+```
+
+## Troubleshooting
+
+**Email not sending?**
+- Gmail users: Use an App Password (https://myaccount.google.com/security)
+- Run `python3 daily_bundle.py --test-email` to verify connection
+
+**Links not working?**
+- The AI searches for real resources, but occasionally links may break
+- Try running again or verify the URL manually
+
+**No prompt provided?**
+- In interactive mode, press Ctrl+D (Mac/Linux) or Ctrl+Z (Windows) when done typing
+- Or use `--prompt` or `--prompt-file` instead
+
+## Project Structure
 
 ```
 learning/
-├── daily_bundle.py          # Main orchestrator script
-├── config.yaml              # User configuration
-├── .env                     # Environment variables (not in git)
-├── .env.example             # Example environment file
-├── requirements.txt         # Python dependencies
-├── README.md               # This file
+├── daily_bundle.py              # Main script
+├── config.yaml                  # Configuration
+├── .env                         # Credentials (not in git)
+├── requirements.txt             # Dependencies
 ├── src/
-│   ├── git_analyzer.py     # Analyzes git commits
-│   ├── content_curator.py  # AI-powered content curation
-│   └── email_sender.py     # Email sending logic
+│   ├── content_curator.py      # AI content curation
+│   └── email_sender.py         # Email delivery
 └── templates/
-    └── email_template.html # Beautiful HTML email template
+    └── email_template.html     # Minimalist email design
 ```
 
-## 🎨 Customizing the Email Template
+## Tips for Best Results
 
-The email template is in `templates/email_template.html`. It uses Jinja2 templating and includes:
+1. **Be specific in your prompts**: "Worked on Unity rigidbody physics for character movement" is better than "Unity stuff"
+2. **Include context**: Mention what you struggled with or want to understand better
+3. **Use it regularly**: Make it part of your learning routine
+4. **Review the resources**: The AI curates quality content, but you choose what to dive into
 
-- Responsive design
-- Beautiful gradients and styling
-- Mobile-friendly layout
-- Fallback plain text version
+## License
 
-Feel free to customize colors, fonts, and layout to match your preferences!
-
-## 🔧 Troubleshooting
-
-### Email not sending
-
-1. **Gmail users**: Make sure you're using an App Password, not your regular password
-2. **Check SMTP settings**: Verify your SMTP server and port in `.env`
-3. **Test connection**: Run `python daily_bundle.py --test-email`
-
-### No content being generated
-
-1. **API key**: Verify your Anthropic API key is correct
-2. **Git commits**: Make sure you have recent commits (run `git log` to check)
-3. **Dry run**: Test with `python daily_bundle.py --dry-run` to see what's being generated
-
-### Bundle not relevant to your work
-
-1. **Update config**: Adjust topics in `config.yaml`
-2. **Commit messages**: Write descriptive commit messages for better analysis
-3. **Days to analyze**: Increase `days_to_analyze` in config.yaml
-
-## 💡 Tips for Best Results
-
-1. **Write meaningful commit messages**: The AI uses these to understand your work
-2. **Commit regularly**: More commits = better understanding of your progress
-3. **Update config.yaml**: Keep your learning topics aligned with current goals
-4. **Review and adjust**: Fine-tune preferences based on the content you receive
-
-## 🤝 Contributing
-
-This is a personal learning tool, but feel free to:
-- Fork and customize for your needs
-- Add new features (e.g., Discord notifications, Slack integration)
-- Improve the AI prompts for better content curation
-- Enhance the email template design
-
-## 📝 License
-
-MIT License - Feel free to use and modify for your personal learning journey!
-
-## 🙏 Acknowledgments
-
-- Built with [Claude AI](https://www.anthropic.com/) for intelligent content curation
-- Email template inspired by modern web design principles
-- Created to support continuous learning in game development
+MIT License - Use freely for your personal learning journey.
 
 ---
 
-**Happy Learning! 🚀** Keep building, keep coding, keep growing!
+**KEEP BUILDING, KEEP LEARNING**

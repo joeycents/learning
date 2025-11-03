@@ -1,11 +1,11 @@
-# 🚀 Quick Start Guide
+# Quick Start Guide
 
 Get your Daily Learning Bundle system running in 5 minutes!
 
 ## Step 1: Install Dependencies
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 ## Step 2: Configure Credentials
@@ -13,7 +13,7 @@ pip install -r requirements.txt
 Run the interactive setup wizard:
 
 ```bash
-python setup.py
+python3 setup.py
 ```
 
 Or manually create a `.env` file:
@@ -31,53 +31,52 @@ You'll need:
 
 ```bash
 # Test email connection
-python daily_bundle.py --test-email
-
-# Generate bundle without sending (preview)
-python daily_bundle.py --dry-run
+python3 daily_bundle.py --test-email
 ```
 
-## Step 4: Send Your First Bundle!
+## Step 4: Generate Your First Bundle!
 
+Try one of these methods:
+
+**Interactive mode** (will prompt you):
 ```bash
-python daily_bundle.py
+python3 daily_bundle.py
+```
+
+**With a prompt**:
+```bash
+python3 daily_bundle.py --prompt "Worked on Unity character physics today"
+```
+
+**Preview first** (doesn't send email):
+```bash
+python3 daily_bundle.py --dry-run --prompt "Learning shader programming"
 ```
 
 Check your email inbox!
 
-## Step 5: Automate (Optional)
+## Usage Tips
 
-### Option A: Cron (Linux/Mac)
-
+**Save daily notes to a file**:
 ```bash
-crontab -e
-# Add this line to run daily at 9 AM:
-0 9 * * * cd /home/user/learning && python3 daily_bundle.py
+echo "Today I worked on Unity physics and character controllers" > today.txt
+python3 daily_bundle.py --prompt-file today.txt
 ```
 
-### Option B: GitHub Actions
-
-1. Go to your repository Settings → Secrets
-2. Add these secrets:
-   - `ANTHROPIC_API_KEY`
-   - `EMAIL_FROM`
-   - `EMAIL_PASSWORD`
-   - `EMAIL_TO`
-   - `SMTP_SERVER` (optional, defaults to smtp.gmail.com)
-   - `SMTP_PORT` (optional, defaults to 587)
-
-3. The workflow in `.github/workflows/daily-learning-bundle.yml` will run automatically!
+**Weekly summaries**:
+```bash
+python3 daily_bundle.py --prompt "This week I learned about Unity's new input system, shader graphs, and scriptable objects"
+```
 
 ## Troubleshooting
 
 **Email not working?**
 - Gmail users: Use an App Password, not your regular password
-- Run `python daily_bundle.py --test-email` to diagnose
+- Run `python3 daily_bundle.py --test-email` to diagnose
 
-**No content generated?**
-- Check your Anthropic API key
-- Make sure you have git commits (run `git log`)
-- Try `python daily_bundle.py --dry-run` to see what's happening
+**No prompt provided error?**
+- In interactive mode, press Ctrl+D (Mac/Linux) or Ctrl+Z (Windows) when done
+- Or use `--prompt` flag instead
 
 **Need help?**
 - Read the full [README.md](README.md)
@@ -85,10 +84,10 @@ crontab -e
 
 ## What's Next?
 
-- Edit `config.yaml` to customize topics and preferences
-- Write good commit messages for better content curation
-- Enjoy your daily learning journey! 🎮
+- Try different prompts to see what kind of content you get
+- Edit `config.yaml` to adjust difficulty and preferences
+- Make it part of your daily learning routine!
 
 ---
 
-**Pro Tip**: The more descriptive your git commit messages, the better the AI can curate relevant content for you!
+**Pro Tip**: The more specific your prompt ("Struggled with Unity Rigidbody constraints today"), the better the AI can find relevant resources!

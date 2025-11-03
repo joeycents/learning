@@ -5,195 +5,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Learning Bundle</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #ffffff;
+            color: #000000;
             line-height: 1.6;
+            padding: 40px 20px;
         }
         .container {
             max-width: 600px;
-            margin: 40px auto;
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin: 0 auto;
+            background: #ffffff;
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
             text-align: center;
+            padding: 0 0 40px 0;
+            border-bottom: 2px solid #000000;
         }
         .header h1 {
-            margin: 0;
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 700;
-        }
-        .header .emoji {
-            font-size: 48px;
-            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
         }
         .header .date {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-top: 10px;
+            font-size: 13px;
+            color: #666666;
+            font-weight: 400;
+            letter-spacing: 0.5px;
         }
         .insight {
-            background: #f8f9fa;
-            padding: 25px 30px;
-            border-left: 4px solid #667eea;
-            margin: 30px 30px 20px 30px;
-            border-radius: 8px;
-        }
-        .insight h3 {
-            margin: 0 0 10px 0;
-            color: #667eea;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            padding: 30px 0;
+            border-bottom: 1px solid #e0e0e0;
         }
         .insight p {
-            margin: 0;
-            color: #4a5568;
+            font-size: 15px;
+            line-height: 1.7;
             font-style: italic;
-        }
-        .content {
-            padding: 0 30px 30px 30px;
+            color: #333333;
         }
         .section {
-            margin: 30px 0;
-            padding: 25px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
+            padding: 40px 0;
+            border-bottom: 1px solid #e0e0e0;
         }
-        .section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
+        .section:last-of-type {
+            border-bottom: none;
         }
-        .section-icon {
-            font-size: 32px;
-            margin-right: 15px;
+        .section-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #000000;
+            margin-bottom: 20px;
         }
-        .section-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #2d3748;
-            margin: 0;
-        }
-        .section-content h4 {
-            margin: 0 0 10px 0;
-            color: #2d3748;
-            font-size: 18px;
-        }
-        .section-content p {
-            color: #4a5568;
-            margin: 8px 0;
+        .section h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.3;
+            color: #000000;
         }
         .meta {
             display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin: 10px 0;
+            gap: 16px;
+            margin: 12px 0;
+            font-size: 13px;
+            color: #666666;
         }
         .meta-item {
-            background: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #667eea;
-            border: 1px solid #667eea;
+            display: flex;
+            align-items: center;
+        }
+        .why-relevant {
+            margin: 20px 0;
+            padding: 16px;
+            background: #f8f8f8;
+            border-left: 3px solid #000000;
+        }
+        .why-relevant p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333333;
         }
         .btn {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 30px;
+            background: #000000;
+            color: #ffffff;
+            padding: 14px 28px;
             text-decoration: none;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-weight: 600;
-            transition: transform 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 20px;
+            border: 2px solid #000000;
+            transition: all 0.2s ease;
         }
         .btn:hover {
-            transform: translateY(-2px);
+            background: #ffffff;
+            color: #000000;
         }
-        .why-relevant {
-            background: white;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-top: 12px;
-            border-left: 3px solid #48bb78;
-        }
-        .why-relevant strong {
-            color: #48bb78;
-        }
-        .exercise {
-            background: #fff5f5;
-            border: 1px solid #fc8181;
-        }
-        .exercise-content {
-            margin-top: 15px;
+        .exercise-description {
+            font-size: 15px;
+            line-height: 1.7;
+            margin: 16px 0;
+            color: #333333;
         }
         .objectives {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
+            margin: 24px 0;
         }
         .objectives h5 {
-            margin: 0 0 10px 0;
-            color: #2d3748;
-            font-size: 14px;
+            font-size: 12px;
+            font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            color: #000000;
         }
         .objectives ul {
-            margin: 0;
-            padding-left: 20px;
+            list-style: none;
+            padding: 0;
         }
         .objectives li {
-            margin: 5px 0;
-            color: #4a5568;
+            font-size: 14px;
+            padding: 8px 0 8px 20px;
+            position: relative;
+            color: #333333;
+        }
+        .objectives li:before {
+            content: "—";
+            position: absolute;
+            left: 0;
+            color: #000000;
         }
         .code-block {
-            background: #1a202c;
-            color: #e2e8f0;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: 'Monaco', 'Courier New', monospace;
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
             font-size: 13px;
+            line-height: 1.6;
             overflow-x: auto;
-            margin: 15px 0;
+            margin: 20px 0;
+            color: #000000;
         }
         .hints {
-            background: #fef5e7;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 3px solid #f39c12;
-            margin: 15px 0;
+            margin: 24px 0;
         }
         .hints h5 {
-            margin: 0 0 10px 0;
-            color: #f39c12;
-            font-size: 14px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            color: #000000;
         }
         .hints ul {
-            margin: 0;
-            padding-left: 20px;
+            list-style: none;
+            padding: 0;
+        }
+        .hints li {
+            font-size: 14px;
+            padding: 8px 0 8px 20px;
+            position: relative;
+            color: #666666;
+        }
+        .hints li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #000000;
         }
         .footer {
-            background: #2d3748;
-            color: white;
-            padding: 30px;
             text-align: center;
+            padding: 40px 0 0 0;
+            margin-top: 40px;
+            border-top: 2px solid #000000;
         }
         .footer p {
-            margin: 5px 0;
-            font-size: 14px;
-            opacity: 0.8;
+            font-size: 12px;
+            color: #666666;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
@@ -201,116 +197,93 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="emoji">🎮</div>
-            <h1>Daily Game Dev Learning Bundle</h1>
+            <h1>DAILY LEARNING BUNDLE</h1>
             <div class="date">{{ date }}</div>
         </div>
 
         <!-- Daily Insight -->
         <div class="insight">
-            <h3>💡 Today's Insight</h3>
             <p>{{ daily_insight }}</p>
         </div>
 
-        <div class="content">
-            <!-- YouTube Video Section -->
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">🎥</div>
-                    <h2 class="section-title">Watch & Learn</h2>
-                </div>
-                <div class="section-content">
-                    <h4>{{ youtube_video.title }}</h4>
-                    <div class="meta">
-                        <span class="meta-item">📺 {{ youtube_video.channel }}</span>
-                        <span class="meta-item">⏱️ {{ youtube_video.duration }}</span>
-                    </div>
-                    <div class="why-relevant">
-                        <strong>Why this video?</strong> {{ youtube_video.why_relevant }}
-                    </div>
-                    <a href="{{ youtube_video.url }}" class="btn">▶️ Watch Now</a>
-                </div>
+        <!-- YouTube Video Section -->
+        <div class="section">
+            <div class="section-label">01 — WATCH</div>
+            <h2>{{ youtube_video.title }}</h2>
+            <div class="meta">
+                <span class="meta-item">{{ youtube_video.channel }}</span>
+                <span class="meta-item">{{ youtube_video.duration }}</span>
+            </div>
+            <div class="why-relevant">
+                <p>{{ youtube_video.why_relevant }}</p>
+            </div>
+            <a href="{{ youtube_video.url }}" class="btn">WATCH NOW</a>
+        </div>
+
+        <!-- Article Section -->
+        <div class="section">
+            <div class="section-label">02 — READ</div>
+            <h2>{{ article.title }}</h2>
+            <div class="meta">
+                <span class="meta-item">{{ article.source }}</span>
+                <span class="meta-item">{{ article.estimated_read_time }}</span>
+            </div>
+            <div class="why-relevant">
+                <p>{{ article.why_relevant }}</p>
+            </div>
+            <a href="{{ article.url }}" class="btn">READ ARTICLE</a>
+        </div>
+
+        <!-- Exercise Section -->
+        <div class="section">
+            <div class="section-label">03 — PRACTICE</div>
+            <h2>{{ exercise.title }}</h2>
+            <div class="meta">
+                <span class="meta-item">{{ exercise.difficulty }}</span>
+                <span class="meta-item">{{ exercise.estimated_time }}</span>
             </div>
 
-            <!-- Article Section -->
-            <div class="section">
-                <div class="section-header">
-                    <div class="section-icon">📚</div>
-                    <h2 class="section-title">Read & Understand</h2>
-                </div>
-                <div class="section-content">
-                    <h4>{{ article.title }}</h4>
-                    <div class="meta">
-                        <span class="meta-item">📖 {{ article.source }}</span>
-                        <span class="meta-item">⏱️ {{ article.estimated_read_time }}</span>
-                    </div>
-                    <div class="why-relevant">
-                        <strong>Why this article?</strong> {{ article.why_relevant }}
-                    </div>
-                    <a href="{{ article.url }}" class="btn">📄 Read Article</a>
-                </div>
+            <div class="exercise-description">
+                {{ exercise.description }}
             </div>
 
-            <!-- Exercise Section -->
-            <div class="section exercise">
-                <div class="section-header">
-                    <div class="section-icon">💻</div>
-                    <h2 class="section-title">Code & Practice</h2>
-                </div>
-                <div class="section-content">
-                    <h4>{{ exercise.title }}</h4>
-                    <div class="meta">
-                        <span class="meta-item">📊 {{ exercise.difficulty }}</span>
-                        <span class="meta-item">⏱️ {{ exercise.estimated_time }}</span>
-                    </div>
-
-                    <div class="exercise-content">
-                        <p><strong>Challenge:</strong> {{ exercise.description }}</p>
-
-                        <div class="objectives">
-                            <h5>🎯 Learning Objectives</h5>
-                            <ul>
-                                {% for objective in exercise.learning_objectives %}
-                                <li>{{ objective }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-
-                        {% if exercise.starter_code %}
-                        <div>
-                            <h5 style="margin: 15px 0 8px 0; color: #2d3748;">Starter Code:</h5>
-                            <div class="code-block">{{ exercise.starter_code }}</div>
-                        </div>
-                        {% endif %}
-
-                        <div class="hints">
-                            <h5>💡 Hints</h5>
-                            <ul>
-                                {% for hint in exercise.hints %}
-                                <li>{{ hint }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-
-                        {% if exercise.bonus_challenges %}
-                        <div class="objectives">
-                            <h5>🌟 Bonus Challenges</h5>
-                            <ul>
-                                {% for bonus in exercise.bonus_challenges %}
-                                <li>{{ bonus }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
+            <div class="objectives">
+                <h5>Learning Objectives</h5>
+                <ul>
+                    {% for objective in exercise.learning_objectives %}
+                    <li>{{ objective }}</li>
+                    {% endfor %}
+                </ul>
             </div>
+
+            {% if exercise.starter_code %}
+            <div class="code-block">{{ exercise.starter_code }}</div>
+            {% endif %}
+
+            <div class="hints">
+                <h5>Hints</h5>
+                <ul>
+                    {% for hint in exercise.hints %}
+                    <li>{{ hint }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            {% if exercise.bonus_challenges %}
+            <div class="objectives">
+                <h5>Bonus Challenges</h5>
+                <ul>
+                    {% for bonus in exercise.bonus_challenges %}
+                    <li>{{ bonus }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            <p>🚀 Keep building, keep learning!</p>
-            <p>Generated with ❤️ by your Daily Learning Bundle system</p>
+            <p>KEEP BUILDING, KEEP LEARNING</p>
         </div>
     </div>
 </body>

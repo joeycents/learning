@@ -3,24 +3,9 @@
 # Your primary learning focus
 learning_focus: "game development"
 
-# Additional topics of interest (will be matched against your code)
-topics:
-  - "Unity game engine"
-  - "game physics"
-  - "game AI"
-  - "3D graphics"
-  - "shader programming"
-  - "procedural generation"
-  - "game design patterns"
-
-# How many days back to analyze commits (default: 1 for yesterday's work)
-days_to_analyze: 1
-
 # Email preferences
 email:
-  subject_prefix: "🎮 Daily Game Dev Learning Bundle"
-  include_code_snippets: true
-  max_snippet_lines: 20
+  subject_prefix: "Daily Learning Bundle"
 
 # Content preferences
 content:
@@ -36,8 +21,3 @@ content:
     enabled: true
     difficulty: "intermediate"  # beginner, intermediate, advanced
     include_solution_hints: true
-
-# Scheduling
-schedule:
-  send_time: "09:00"  # Time to send email (24-hour format)
-  timezone: "UTC"

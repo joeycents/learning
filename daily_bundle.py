@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Daily Learning Bundle - Main orchestrator script
-Analyzes your recent code changes and sends a personalized learning bundle
+Generates personalized learning bundles based on what you're working on
 """
 import os
 import sys
@@ -10,11 +10,11 @@ import argparse
 from pathlib import Path
 from typing import Dict
 from dotenv import load_dotenv
+from datetime import datetime
 
 # Add src directory to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
-from git_analyzer import GitAnalyzer
 from content_curator import ContentCurator
 from email_sender import EmailSender
 
@@ -30,17 +30,18 @@ class DailyBundleOrchestrator:
             self.config = yaml.safe_load(f)
 
         # Initialize components
-        self.git_analyzer = GitAnalyzer()
         self.content_curator = ContentCurator()
         self.email_sender = EmailSender()
 
-    def run(self, dry_run: bool = False, test_email: bool = False) -> bool:
+    def run(self, user_prompt: str = None, dry_run: bool = False, test_email: bool = False, prompt_file: str = None) -> bool:
         """
         Run the daily learning bundle workflow.
 
         Args:
+            user_prompt: What you worked on / want to learn about
             dry_run: If True, generates bundle but doesn't send email
             test_email: If True, only tests email connection
+            prompt_file: Path to file containing the prompt
 
         Returns:
             bool: True if successful, False otherwise
@@ -54,26 +55,40 @@ class DailyBundleOrchestrator:
             print("Testing email connection...")
             return self.email_sender.test_connection()
 
-        # Step 1: Analyze git commits
-        print("📊 Analyzing recent code changes...")
-        days = self.config.get("days_to_analyze", 1)
-        git_analysis = self.git_analyzer.analyze_commits(days=days)
+        # Get user prompt
+        if prompt_file:
+            with open(prompt_file, 'r') as f:
+                user_prompt = f.read().strip()
+        elif not user_prompt:
+            # Interactive prompt
+            print("What did you work on today? (Or what do you want to learn?)")
+            print("Enter your description (press Ctrl+D or Ctrl+Z when done):")
+            print("-" * 50)
+            lines = []
+            try:
+                while True:
+                    line = input()
+                    lines.append(line)
+            except EOFError:
+                pass
+            user_prompt = '\n'.join(lines).strip()
 
-        if git_analysis["has_changes"]:
-            print(f"✓ Found {git_analysis['commit_count']} commit(s)")
-            print(f"✓ {len(git_analysis['files_changed'])} file(s) changed")
-        else:
-            print("ℹ️  No recent commits found")
+        if not user_prompt:
+            print("❌ No prompt provided. Exiting.")
+            return False
 
         print()
+        print(f"📝 Learning focus: {user_prompt[:100]}...")
+        print()
 
-        # Step 2: Curate learning content
+        # Curate learning content
         print("🤖 Curating personalized learning content with AI...")
+        print("   (Searching for real resources, this may take a moment...)")
         learning_focus = self.config.get("learning_focus", "game development")
 
         try:
             bundle = self.content_curator.curate_learning_bundle(
-                git_analysis=git_analysis,
+                user_prompt=user_prompt,
                 learning_focus=learning_focus,
                 config=self.config
             )
@@ -151,7 +166,29 @@ class DailyBundleOrchestrator:
 def main():
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        description="Generate and send a daily learning bundle based on your recent code changes"
+        description="Generate and send a personalized daily learning bundle",
+        epilog="""
+Examples:
+  # Interactive mode (will prompt you for input)
+  python3 daily_bundle.py
+
+  # With inline prompt
+  python3 daily_bundle.py --prompt "Worked on Unity character controller physics"
+
+  # From a file
+  python3 daily_bundle.py --prompt-file today.txt
+
+  # Preview without sending
+  python3 daily_bundle.py --dry-run --prompt "Learning shader programming"
+        """
+    )
+    parser.add_argument(
+        "-p", "--prompt",
+        help="What you worked on / want to learn (or use interactive mode)"
+    )
+    parser.add_argument(
+        "--prompt-file",
+        help="File containing your prompt"
     )
     parser.add_argument(
         "--dry-run",
@@ -173,7 +210,12 @@ def main():
 
     try:
         orchestrator = DailyBundleOrchestrator(config_path=args.config)
-        success = orchestrator.run(dry_run=args.dry_run, test_email=args.test_email)
+        success = orchestrator.run(
+            user_prompt=args.prompt,
+            prompt_file=args.prompt_file,
+            dry_run=args.dry_run,
+            test_email=args.test_email
+        )
         sys.exit(0 if success else 1)
 
     except FileNotFoundError as e:
