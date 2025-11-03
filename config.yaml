@@ -19,5 +19,6 @@ content:
 
   exercise:
     enabled: true
-    difficulty: "intermediate"  # beginner, intermediate, advanced
+    difficulty: "beginner"  # beginner, intermediate, advanced
+    estimated_time: "15 minutes"  # default exercise duration
     include_solution_hints: true

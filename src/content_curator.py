@@ -88,20 +88,31 @@ class ContentCurator:
 
 Create a learning bundle with the following components:
 
-1. **YouTube Video**: Search the web to find a REAL, high-quality YouTube video (10-30 minutes) that teaches concepts related to what the user described. You MUST provide an actual, real video URL.
+1. **YouTube Video**: Search the web to find a REAL, high-quality YouTube video (10-30 minutes).
+   - First search for articles/pages that mention or link to relevant videos
+   - Extract the ACTUAL YouTube URL from those sources (copy it exactly as it appears)
+   - Verify the URL format is correct (youtube.com/watch?v=VIDEO_ID)
+   - Also provide the channel's main URL as a fallback
 
-2. **Article**: Search the web to find a REAL, high-quality article or tutorial. You MUST provide an actual, real article URL from a reputable source (official docs, well-known blogs, tutorials).
+2. **Article**: Search the web to find a REAL, high-quality article or tutorial.
+   - Search for articles on the topic from reputable sources
+   - Copy the EXACT URL from the search results (do not modify or construct URLs)
+   - Also provide the source's main website URL as a fallback
 
-3. **Coding Exercise**: Create an original, practical coding exercise that reinforces the concepts. Make it challenging but achievable in 30-60 minutes.
+3. **Coding Exercise**: Create an original, practical exercise that takes only 15 minutes to complete.
+   - Focus on ONE specific skill or concept
+   - Make it simple and achievable for beginners
+   - Should be a focused practice exercise, not a full project
 
-## CRITICAL REQUIREMENTS
+## CRITICAL REQUIREMENTS FOR URLs
 
-- **Use web search to find REAL resources** - Do NOT make up URLs or links
-- **Verify the content exists** - Only recommend resources you can confirm are real
+- **Search first, extract URLs second** - Find pages that reference the content, then copy URLs exactly
+- **Copy URLs character-by-character** - Do not paraphrase, modify, or construct URLs
+- **Verify URL format** - Check that URLs start with https:// and look valid
+- **Provide fallback URLs** - Include channel homepage and source homepage as backup options
 - Focus on {learning_focus}
-- YouTube videos should be from reputable channels (Sebastian Lague, Brackeys, Code Monkey, GDC, etc.)
-- Articles should be from quality sources (Unity docs, Unreal docs, gamedeveloper.com, etc.)
-- Exercise should be original and practical
+- YouTube: reputable channels (Sebastian Lague, Brackeys, Code Monkey, Catlike Coding, GDC, etc.)
+- Articles: quality sources (Unity docs, Unreal docs, gamedeveloper.com, official documentation)
 
 ## Output Format
 
@@ -109,33 +120,35 @@ Respond ONLY with valid JSON in this exact format:
 
 {{
   "youtube_video": {{
-    "title": "Exact video title",
-    "url": "https://youtube.com/watch?v=REAL_VIDEO_ID",
+    "title": "Exact video title as it appears",
+    "url": "https://youtube.com/watch?v=EXACT_VIDEO_ID",
     "channel": "Exact channel name",
+    "channel_url": "https://youtube.com/@channelname or channel homepage",
     "duration": "MM:SS",
-    "why_relevant": "Why this specific video helps with what they're learning"
+    "why_relevant": "Why this specific video helps (1-2 sentences)"
   }},
   "article": {{
-    "title": "Exact article title",
-    "url": "https://actual-real-url.com/article",
+    "title": "Exact article title as it appears",
+    "url": "https://exact-url-from-search.com/path",
     "source": "Website name",
+    "source_url": "https://website-homepage.com",
     "estimated_read_time": "X minutes",
-    "why_relevant": "Why this specific article is helpful"
+    "why_relevant": "Why this specific article is helpful (1-2 sentences)"
   }},
   "exercise": {{
     "title": "Exercise Title",
-    "description": "Clear, detailed description of what to build/implement",
-    "difficulty": "beginner|intermediate|advanced",
-    "estimated_time": "X minutes",
-    "learning_objectives": ["objective 1", "objective 2", "objective 3"],
-    "starter_code": "// Helpful starter code if applicable",
+    "description": "Clear description of ONE specific thing to practice",
+    "difficulty": "beginner",
+    "estimated_time": "15 minutes",
+    "learning_objectives": ["one focused objective", "related sub-skill"],
+    "starter_code": "// Brief starter code if helpful",
     "hints": ["hint 1", "hint 2", "hint 3"],
-    "bonus_challenges": ["bonus 1", "bonus 2"]
+    "bonus_challenges": ["optional extension 1", "optional extension 2"]
   }},
-  "daily_insight": "A brief, motivating insight connecting their work to today's learning (2-3 sentences)"
+  "daily_insight": "A brief, motivating insight (1-2 sentences)"
 }}
 
-IMPORTANT: Use your web search capability to find real, verified URLs. Output ONLY the JSON, no other text."""
+CRITICAL: When searching, look for pages that LIST or REFERENCE videos/articles about this topic, then COPY the exact URLs you find. Do not construct or guess URLs. Output ONLY the JSON, no other text."""
 
         return prompt
 
